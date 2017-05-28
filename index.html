@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script> -->
+	<script type="text/javascript" src="json.js"></script>
+	<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+	<link rel="stylesheet" href="css/style.css" />
+	<script type="text/javascript">
+		$(document).ready(function(){
+			menuAll.forEach(function (menu, i , menuAll){
+				$('.menuBlock').append('<div class="menu_item menu_id'+menu.menu_id+'" id="'+(i+1)+'">'+menu.menu_title+'<img  src="'+menu.menu_icon+'"></div>');
+			});
+				
+			/*-------------*/
+			function scrol(){
+				var destination = $('.activ').offset().top;
+			 	$('body').animate({ scrollTop: destination-60 }, 200);
+			}
+			
+			function down(){
+				var i = $('.activ').attr('id');
+					var nameClass = $('.activ').attr('class');
+					nameClass = nameClass.split(' ');
+					if(nameClass[0] == 'menu_item'){
+						var last = $('.menu_item').length;
+						$('.activ').removeClass('activ');
+
+						if( i == last){
+							i = 1;
+						}else{
+							i++;
+						}
+						$('.menuBlock > .menu_item[id = "' + i + '"]').addClass('activ');
+					}
+					if(nameClass[0] == 'category_item'){
+						var imenu = $('.menu_item.on').attr('id');
+						var last = $('.category_item.menu'+imenu).length
+						var i = $('.activ').attr('id');
+						$('.activ').removeClass('activ');
+
+						if( i == last){
+							i = 1;
+						}else{
+							i++;
+						}
+						$('.categoryBlock > .category_item[id = "' + i + '"]').addClass('activ');
+					}
+					if(nameClass[0] == 'item'){
+						var icat = $('.category_item.on').attr('id');
+						var last = $('.item.category_'+icat).length
+						var i = $('.activ').attr('id');
+						$('.activ').removeClass('activ');
+
+						if( i == last){
+							i = 1;
+						}else{
+							i++;
+						}
+						$('.itemBlock > .item[id = "' + i + '"]').addClass('activ');
+					}
+			}
+			function up(){
+				var i = $('.activ').attr('id');
+
+					var nameClass = $('.activ').attr('class');
+					nameClass = nameClass.split(' ');
+
+					if(nameClass[0] == 'menu_item'){
+						var first = $('.menu_item:first').attr('id');
+						var last = $('.menu_item:last').attr('id');
+						$('.activ').removeClass('activ');
+						if( i == first){
+							i = last;
+						}else{
+							i--;
+						}
+						$('.menuBlock > .menu_item[id = "' + i + '"]').addClass('activ');
+					}
+					if(nameClass[0] == 'category_item'){
+						var imenu = $('.menu_item.on').attr('id');
+						var first = $('.category_item.menu'+imenu+':first').attr('id');
+						var last = $('.category_item.menu'+imenu).length
+						$('.activ').removeClass('activ');
+						if( i == first){
+							i = last;
+						}else{
+							i--;
+						}
+						$('.categoryBlock > .category_item[id = "' + i + '"]').addClass('activ');
+					}
+					if(nameClass[0] == 'item'){
+						var icat = $('.category_item.on').attr('id');
+						var last = $('.item.category_'+icat).length
+						var first = $('.item.category_'+icat+':first').attr('id');
+						$('.activ').removeClass('activ');
+						if( i == first){
+							i = last;
+						}else{
+							i--;
+						}
+						$('.itemBlock > .item[id = "' + i + '"]').addClass('activ');
+					}
+			}
+			function ok(){
+				var i = $('.activ').attr('id');
+				var nameClass = $('.activ').attr('class');
+				
+				nameClass = nameClass.split(' ');
+				var category_id = nameClass[2].split('_');
+				
+				$('#'+i+'.'+nameClass[0]).addClass('on');
+				
+				$('.activ').removeClass('activ');
+				if(nameClass[0] == 'menu_item'){
+					showCategory(menuAll[i-1], i);
+					$('.categoryBlock').css("display", "block");
+					$('.categoryBlock > .category_item.menu'+i).css("display", "block");
+					$('.categoryBlock > .category_item.menu'+i+':first').addClass("activ");
+				}
+				if(nameClass[0] == 'category_item'){
+					showItems(category_id[1]);
+					$('.itemBlock').css("display", "block");
+					$('.itemBlock > .item').css("display", "block");
+					$('.itemBlock > .item:first').addClass("activ");
+				}
+				if(nameClass[0] == 'item'){
+					var title = $('.item.on p:last').text();
+					$('#title').text(title);
+				}
+			}
+			function left(){
+				if($("div").is(".activ")){
+					var nameClass = $('.activ').attr('class');
+					nameClass = nameClass.split(' ');
+
+					if(nameClass[0] == 'category_item'){
+						removeCategory();
+						$('.on.menu_item').addClass('activ');
+						$('.on.menu_item').removeClass('on');
+						
+					}
+					if(nameClass[0] == 'item'){
+						removeItems();
+						$('.on.category_item').addClass('activ');
+						$('.on.category_item').removeClass('on');
+						
+					}
+				}else{
+					if($('div.item').is('.on')){
+						$('.on.item').addClass('activ');
+						$('.on.item').removeClass('on');
+						return;
+					}
+					if($('div.category_item').is('.on')){
+						$('.on.category_item').addClass('activ');
+						$('.on.category_item').removeClass('on');
+						return;
+					}
+					if($('div.menu_item').is('.on')){
+						$('.on.menu_item').addClass('activ');
+						$('.on.menu_item').removeClass('on');
+						return;
+					}
+				}
+			}
+			$('#down').click(function(){
+			 	down();
+			 	scrol();
+			});
+			$('#up').click(function(){
+			 	up();
+			 	scrol();
+			});
+			$('#ok').click(function(){
+			 	ok();
+			});
+			$('#right').click(function(){
+			 	ok();
+			});
+			$('#left').click(function(){
+			 	left();
+			});
+
+			$('html').keydown(function(eventObject){ //отлавливаем нажатие клавиш down
+				if (event.keyCode == 40) {
+					down();
+					scrol();
+				}
+				if (event.keyCode == 38) {
+					up();
+					scrol();
+				}
+
+				if (event.keyCode == 13 || event.keyCode == 39) { //ok
+					ok();
+				}
+				if(event.keyCode == 37){
+					left();
+				}
+			});
+			
+			function removeCategory(){
+				$("div.categoryBlock").empty()
+				$('.categoryBlock').css("display", "none");
+			}
+			function removeItems(){
+				$("div.itemBlock").empty()
+				$('.item').css("display", "none");
+			}
+
+			function showItems(cat_id){
+				category[cat_id-1].forEach(function(item, i, category){
+					$('.itemBlock').append(
+							'<div class="item category_' +cat_id+ '" id="' +(i+1)+ '" > <p>' +item.id+ '</p><p id="titleItem">' +item.title+'</p></div>'
+					);
+				});
+			}
+			function showCategory(menu, i){
+				var cat = menu.menu_items;
+				cat.forEach(function(category, i, cat){
+					
+					$('.categoryBlock').append(
+						'<div class="category_item menu' +menu.menu_id+ ' category_' +category.category_id+ '" id="' +(i+1)+ '" >' +category.category_title+ '<img  src="' +category.category_icon+ '"></div>'
+					);
+				});
+			}
+
+			/*---------*/
+			$('.menuBlock .menu_item:first').addClass('activ');
+		});
+		
+	</script>
+
+</head>
+<body >
+    <div  id="title">
+    	
+    </div>
+    <div class="content">
+    	
+    	<div class="menuBlock">	
+		</div>
+		<div class="categoryBlock" >
+	    </div>
+	    <div class="itemBlock" >
+	    </div> 
+    </div>  
+    <div class="nav">
+    	<div id="up"></div>
+    	<div id="left"></div>
+    	<div id="ok"></div>
+    	<div id="right"></div>
+    	<div id="down"></div>
+    </div>
+</body>
+</html>
