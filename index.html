@@ -1,21 +1,43 @@
-<!DOCTYPE html>
+<html>
 <html>
 <head>
 	<title></title>
-	<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script> -->
-	<script type="text/javascript" src="json.js"></script>
 	<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 	<link rel="stylesheet" href="css/style.css" />
 	<script type="text/javascript">
 		$(document).ready(function(){
-			menuAll.forEach(function (menu, i , menuAll){
-				$('.menuBlock').append('<div class="menu_item menu_id'+menu.menu_id+'" id="'+(i+1)+'">'+menu.menu_title+'<img  src="'+menu.menu_icon+'"></div>');
-			});
-				
+
+			var menuAll; 
+			$.getJSON('http://digiline.co/test_task/menu.json', function(data) {
+                
+                menuAll = data;
+                console.log(menuAll);	
+               	menuAll.forEach(function (menu, i , menuAll){
+					$('.menuBlock').append('<div class="menu_item menu_id'+menu.menu_id+'" id="'+(i+1)+'">'+menu.menu_title+'<img  src="'+menu.menu_icon+'"></div>');
+				});
+						
+				$('.menuBlock .menu_item:first').addClass('activ');
+		    });
+
+			
+
 			/*-------------*/
+
 			function scrol(){
+				var nameClass = $('.activ').attr('class');
+				nameClass = nameClass.split(' ');
 				var destination = $('.activ').offset().top;
-			 	$('body').animate({ scrollTop: destination-60 }, 200);
+				if(destination >440 || destination < 160){
+					if(nameClass[0] == 'menu_item'){
+						$('.menuBlock').animate({ scrollTop: destination-141 }, 200);
+					}
+					if(nameClass[0] == 'category_item'){
+						$('.categoryBlock').animate({ scrollTop: destination-141 }, 200);
+					}
+					if(nameClass[0] == 'item'){
+						$('.itemBlock').animate({ scrollTop: destination-141 }, 200);
+					}
+				}
 			}
 			
 			function down(){
@@ -109,6 +131,7 @@
 				nameClass = nameClass.split(' ');
 				var category_id = nameClass[2].split('_');
 				
+				$('.'+nameClass[0]).removeClass('on');
 				$('#'+i+'.'+nameClass[0]).addClass('on');
 				
 				$('.activ').removeClass('activ');
@@ -121,12 +144,11 @@
 				if(nameClass[0] == 'category_item'){
 					showItems(category_id[1]);
 					$('.itemBlock').css("display", "block");
-					$('.itemBlock > .item').css("display", "block");
-					$('.itemBlock > .item:first').addClass("activ");
 				}
 				if(nameClass[0] == 'item'){
-					var title = $('.item.on p:last').text();
+					var title = $('.item.on > .title').text();
 					$('#title').text(title);
+					$('.on.item').addClass("activ");
 				}
 			}
 			function left(){
@@ -134,7 +156,15 @@
 					var nameClass = $('.activ').attr('class');
 					nameClass = nameClass.split(' ');
 
-					if(nameClass[0] == 'category_item'){
+					if($.trim($('.categoryBlock').text()) == "" ){
+						removeCategory();
+					}
+					if($.trim($('.itemBlock').text()) == "" ){
+						removeItems();
+					}
+
+					if(nameClass[0] == 'category_item' ){
+
 						removeCategory();
 						$('.on.menu_item').addClass('activ');
 						$('.on.menu_item').removeClass('on');
@@ -146,6 +176,7 @@
 						$('.on.category_item').removeClass('on');
 						
 					}
+					
 				}else{
 					if($('div.item').is('.on')){
 						$('.on.item').addClass('activ');
@@ -162,6 +193,7 @@
 						$('.on.menu_item').removeClass('on');
 						return;
 					}
+
 				}
 			}
 			$('#down').click(function(){
@@ -201,20 +233,35 @@
 			});
 			
 			function removeCategory(){
-				$("div.categoryBlock").empty()
 				$('.categoryBlock').css("display", "none");
+				$("div.categoryBlock").empty()
+				
 			}
 			function removeItems(){
 				$("div.itemBlock").empty()
-				$('.item').css("display", "none");
+				$('.itemBlock').css("display", "none");
 			}
 
 			function showItems(cat_id){
-				category[cat_id-1].forEach(function(item, i, category){
-					$('.itemBlock').append(
-							'<div class="item category_' +cat_id+ '" id="' +(i+1)+ '" > <p>' +item.id+ '</p><p id="titleItem">' +item.title+'</p></div>'
-					);
-				});
+				$.getJSON('http://digiline.co/test_task/category_'+cat_id+'.json', function(data) {
+	                
+	                var category = data;
+	                console.log(category);
+	                category.forEach(function(item, i, category){
+	                	if(Number(item.id) < 10){
+							$('.itemBlock').append(
+									'<div class="item category_' +cat_id+ '" id="' +(i+1)+ '" > <div class="number">0' +item.id+ '</div> <div class="title">'+item.title+'</div></div>'
+							);
+						}else{
+							$('.itemBlock').append(
+								'<div class="item category_' +cat_id+ '" id="' +(i+1)+ '" > <div class="number">' +item.id+ '</div> <div class="title">'+item.title+'</div></div>'
+							);
+						}
+					});
+					$('.itemBlock > .item').css("display", "block");
+	               	$('.itemBlock > .item:first').addClass("activ");
+			    });
+
 			}
 			function showCategory(menu, i){
 				var cat = menu.menu_items;
@@ -225,19 +272,19 @@
 					);
 				});
 			}
-
 			/*---------*/
-			$('.menuBlock .menu_item:first').addClass('activ');
+			
 		});
 		
 	</script>
 
 </head>
 <body >
-    <div  id="title">
-    	
-    </div>
-    <div class="content">
+	<div class="content">
+	    <div  id="title">
+	    	
+	    </div>
+    
     	
     	<div class="menuBlock">	
 		</div>
@@ -245,13 +292,15 @@
 	    </div>
 	    <div class="itemBlock" >
 	    </div> 
+    
+	    <div class="nav">
+	    	<div id="up"></div>
+	    	<div id="left"></div>
+	    	<div id="ok">OK</div>
+	    	<div id="right"></div>
+	    	<div id="down"></div>
+	    </div>
+
     </div>  
-    <div class="nav">
-    	<div id="up"></div>
-    	<div id="left"></div>
-    	<div id="ok"></div>
-    	<div id="right"></div>
-    	<div id="down"></div>
-    </div>
 </body>
 </html>

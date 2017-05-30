@@ -1,26 +1,48 @@
+@font-face {
+    font-family: RobotoRegular; /* Гарнитура шрифта */
+    src: url(../fonts/Roboto-Regular.ttf); /* Путь к файлу со шрифтом */
+   }
+@font-face {
+    font-family: RobotoMedium; /* Гарнитура шрифта */
+    src: url(../fonts/Roboto-Medium.ttf); /* Путь к файлу со шрифтом */
+   }
 body{
+	font-family: RobotoRegular; 
+	color: #000;
 	margin: 0;
-	padding: 0;
-	font-family: Roboto ;
 }
 #title{
+	font-family: RobotoMedium;
 	padding: 15px;
-	height: 30px;
+	height: 103px;
 	width: 570px;
-	line-height:30px;
-	background: #000;
+	line-height:100px;
+	font-size: 24pt;
 	color: #fff;
+}
+.content{
+	margin: 0;
+	padding-left: 31px;
+	height: 720px;
+	width: 1024px;
+	background: #000;
 }
 .menuBlock, .categoryBlock, .itemBlock{
 	float: left;
-	width: 200px;
+	margin-left: 1px;
+	padding-top: 8px;
+
+	overflow: hidden;
+	width: 320px;
+	height: 500px;
 	background: #eeeeee;
 }
 .menu_item, .category_item{
-	padding:0 15px 0 15px;
-	line-height:50px;
-	width: 170px;
-	height: 50px;
+	padding:0 25px 0 25px;
+
+	line-height:48px;
+	width: 270px;
+	height: 48px;
 }
 .menu_item img, .category_item img{
 	float: right;
@@ -28,12 +50,13 @@ body{
 	vertical-align: middle;
 
 }
-.activ{
-	background: #bee4e9;
-}
 .on{
 	background: #e2e2e2;
 }
+.activ{
+	background: #bee4e9;
+}
+
 .categoryBlock{
 	display: none;
 }
@@ -46,21 +69,43 @@ body{
 }
 .item{
 	display: none;	
-	width: 200px;
-	height: 50px;
+	padding:0 25px 0 25px;
+
+	line-height:48px;
+	width: 270px;
+	height: 48px;
 }
-.item p{
+.title{
+
 	display: block;
 	float: left;
-	padding-left: 25px;
+	width: 200px;
+
 }
+.number{
+	font-family: RobotoMedium;
+	float: left;
+	left:0;
+	margin-left: -25px;
+	text-align: center;
+	width: 70px;
+	height: 48px;
+	line-height:50px;
+}
+.title{
+	float: left;
+}
+
 .nav{
 	position: absolute;
-	bottom:0;
-	right: 0;
+	margin-top: 337px;
+	margin-left: 774px;	
 	width: 250px;
 	height: 250px;
-	background: url('../nav.png');
+	border-radius: 250px 0 0 0;
+	background: #838ac4;
+
+	/*background: url('../nav.png');*/
 
 }
 #up,#left, #right, #ok, #down{
@@ -72,65 +117,41 @@ body{
 #up{
 	bottom:145px;
 	right: 75px;
+	background: url('../img/up.png');
 
 }
 #down{
 	bottom:10px;
 	right: 75px;
+	background: url('../img/down.png');
 }
 #left{
 	bottom:80px;
 	right: 140px;
-
+	background: url('../img/left.png');
 }
 #right{
 	bottom:80px;
 	right: 10px;
-
+	background: url('../img/right.png');
 }
 #ok{
-	bottom:80px;
-	right: 75px;
+	width: 70px;
+	height: 70px;
+	border-radius: 35px;
+	text-align: center;
+	line-height:70px;
+	background: #000;
+	color: #fff;
+	font-size: 24pt;
+	bottom:70px;
+	right: 65px;
 
 }
 
-#up:hover{
+#up:hover, #down:hover, #left:hover, #right:hover,#ok:hover{
 	opacity: 0.4;
-	background: #818bc7;
 }
-#up:active{
+#up:active, #down:active, #left:active, #right:active,#ok:active{
 	opacity: 0.8;
-	background: #818bc7;
-}
-#down:hover{
-	opacity: 0.4;
-	background: #818bc7;
-}
-#down:active{
-	opacity: 0.8;
-	background: #818bc7;
-}
-#left:hover{
-	opacity: 0.4;
-	background: #818bc7;
-}
-#left:active{
-	opacity: 0.8;
-	background: #818bc7;
-}
-#right:hover{
-	opacity: 0.4;
-	background: #818bc7;
-}
-#right:active{
-	opacity: 0.8;
-	background: #818bc7;
-}
-#ok:hover{
-	opacity: 0.4;
-	background: #080a12;
-}
-#ok:active{
-	opacity: 0.8;
-	background: #080a12;
 }
